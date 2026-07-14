@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Travelling Application Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header img {
+            width: 120px;
+            margin-right: 20px;
+        }
+
+        .header h2 {
+            flex-grow: 1;
+            text-align: center;
+            margin: 0;
+            font-size: 18pt;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 11pt;
+        }
+
+        td {
+            border: 1px solid #000;
+            padding: 8px;
+            vertical-align: top;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        tr {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        .label {
+            font-weight: bold;
+            width: 30%;
+            background-color: #f0f0f0;
+        }
+
+        .section {
+            margin-top: 20px;
+            font-size: 10pt;
+            line-height: 1.5;
+            color: red;
+        }
+
+        hr {
+            border: 1px solid #000;
+        }
+
+        @media print {
+            button {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <img src="https://brandlogos.net/wp-content/uploads/2024/03/cosco-logo_brandlogos.net_t6uiu.png" alt="Logo">
+        <h2>DOMESTIC / OVERSEAS OUTSTATION TRAVELLING</h2>
+    </div>
+
+    <hr>
+
+    <table>
+        <tr>
+            <td class="label">NAME OF APPLICANT :</td>
+            <td>{{ applicant.name }}</td>
+            <td class="label">APPLY DATE :</td>
+            <td>{{ applicant.applydate }}</td>
+        </tr>
+        <tr>
+            <td class="label">APPLICANT SAP ID :</td>
+            <td>{{ applicant.sapid }}</td>
+            <td class="label">DEPARTMENT :</td>
+            <td>{{ applicant.department }}</td>
+        </tr>
+        <tr>
+            <td class="label">FROM DATE :</td>
+            <td>{{ applicant.fromdate }}</td>
+            <td class="label">TO DATE :</td>
+            <td>{{ applicant.todate }}</td>
+        </tr>
+        <tr>
+            <td class="label">TOTAL DAYS OF TRAVELLING :</td>
+            <td>{{ applicant.travellingdays }}</td>
+            <td class="label">ACCOMMODATION PAY BY APPLICANT ?</td>
+            <td>{{ applicant.accomodation }}</td>
+        </tr>
+        <tr>
+            <td class="label">TRANSPORTATION MODE :</td>
+            <td>{{ applicant.transportation }}</td>
+            <td class="label">APPLICABLE FOR ADDITIONAL RM50/DAY<br>
+                <small>(ONLY for self-drive within Malaysia, Singapore and South)</small>
+            </td>
+            <td>{{ applicant.addiotional50 }}</td>
+        </tr>
+        <tr>
+            <td class="label">DESTINATION :</td>
+            <td colspan="3">{{ applicant.destination }}</td>
+        </tr>
+        <tr>
+            <td class="label" rowspan="4">PURPOSE OF TRAVELLING :</td>
+            <td colspan="3" rowspan="4" id="purposeCell">{{ applicant.purpose }}</td>
+        </tr>
+        <tr></tr>
+        <tr></tr>
+        <tr></tr>
+        {% if applicant.level1_email %}
+        <tr>
+            <td class="label">APPROVED BY HOD :</td>
+            <!-- Approved or Rejected according to the management decision -->
+            {% if '1' in approval_data %}
+                <td>{{ applicant.level1_status }} - {{ applicant.level1_email }}</td>
+                <td class="label">DATE :</td>
+                <td>{{ applicant.level1_date }}</td>
+            {% else %}
+                <td></td>
+                <td class="label">DATE :</td>
+                <td></td>
+            {% endif %}
+        </tr>
+        {% endif %}
+        {% if applicant.level2_email %}
+        <tr>
+            <td class="label">APPROVED BY Management Incharge :</td>
+            <!-- Approved or Rejected according to the management decision -->
+            {% if '2' in approval_data %}
+                <td>{{ applicant.level2_status }} - {{ applicant.level2_email }}</td>
+                <td class="label">DATE :</td>
+                <td>{{ applicant.level2_date }}</td>
+            {% else %}
+                <td></td>
+                <td class="label">DATE :</td>
+                <td></td>
+            {% endif %}
+        </tr>
+        {% endif %}
+        <tr>
+            <td class="label">APPROVED BY MANAGING DIRECTOR :</td>
+            <!-- Approved or Rejected according to the management decision -->
+            <td>{{ applicant.level3_status }} - {{ applicant.level3_email }}</td>
+            <td class="label">DATE :</td>
+            <td>{{ applicant.level3_date }}</td>
+        </tr>
+    </table>
+
+    <div class="section">
+        <strong>REMARK:</strong><br>
+        1) The approved travelling form must be submitted to GMD at least 14 days in advance prior to travelling date
+        for smooth travel arrangement.<br>
+        2) For overnight outstation application with travelling allowance claim, hotel claim & other expenses that are
+        paid by applicant, the EA in MAS system must be created before travel date. This form must be uploaded as
+        supporting document.
+    </div>
+
+    <br>
+    <button onclick="window.print()">🖨️ Print PDF</button>
+
+    <script>
+        // Auto line-break every 10 words in "PURPOSE OF TRAVELLING"
+        const cell = document.getElementById('purposeCell');
+        const words = cell.textContent.trim().split(/\s+/);
+        const chunked = [];
+
+        for (let i = 0; i < words.length; i += 13) {
+            chunked.push(words.slice(i, i + 13).join(' '));
+        }
+
+        cell.innerHTML = chunked.join('<br>');
+    </script>
+
+</body>
+
+</html>
